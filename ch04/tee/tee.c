@@ -1,6 +1,14 @@
+/**
+ * @file	tee.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
+#include "opts.h"
 // for fprintf, stdin, stderr
 #include <stdio.h>
-// for open, close, O_WRONLY, O_CREAT
+// for open, close, O_WRONLY, O_CREAT, O_APPEND, O_TRUNC
 #include <fcntl.h>
 // for read, STDIN_FILENO
 #include <unistd.h>
@@ -32,15 +40,15 @@ int main(int argc, char * argv[])
 	int src_fd = -1, dest_fd = -1;
 	int num_read;
 	char buf[BUFSIZE];
+	struct tee_opts opts;
 
-	// check arguments
-	if (argc != 2) {
-		fprintf(stderr, "Usage: tee file\n");
-		return EXIT_FAILURE;
-	}
+	opts = read_opts(argc, argv);
 
 	src_fd = STDIN_FILENO;
-	dest_fd = open(argv[1], O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	dest_fd = open(
+			opts.filename,
+			O_WRONLY | O_CREAT | (opts.append ? O_APPEND : O_TRUNC),
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
 	if (dest_fd == -1) {
 		goto fail;
 	}

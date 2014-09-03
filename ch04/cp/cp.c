@@ -50,9 +50,9 @@ static void __attribute__((__noreturn__)) error(void)
 /**
  * Skips zeros in a buffer and return the number of skipped characters.
  */
-static int skip_zeros(char ** buf_p, size_t * buf_len_p)
+static size_t skip_zeros(char ** buf_p, size_t * buf_len_p)
 {
-	int num_skipped = 0;
+	size_t num_skipped = 0;
 
 	// loop until first non-zero character or end of buffer
 	while (num_skipped < *buf_len_p && **buf_p == '\0') {
@@ -65,12 +65,34 @@ static int skip_zeros(char ** buf_p, size_t * buf_len_p)
 }
 
 /**
+ * Writes nonzeros from a buffer and return the number of written characters.
+ */
+static ssize_t write_nonzeros(int fd, char ** buf_p, size_t * buf_len_p)
+{
+	size_t len;
+
+	// count the number of bytes until the next zero
+	len = strnlen(*buf_p, *buf_len_p);
+
+	if (len) {
+		// write the bytes until the next zero
+		if (write(fd, *buf_p, len) != len) {
+			return -errno;
+		}
+		*buf_len_p -= len;
+		*buf_p += len;
+	}
+	return len;
+}
+
+/**
  * Copies data from the source file to the destination file.
  */
 static int copy(int src_fd, int dest_fd)
 {
 	char * buf = NULL;
 	size_t num_read;
+	size_t num_skip = 0;
 
 	if ((buf = (char *)malloc(sizeof(char) * BUFSIZE)) == NULL) {
 		goto fail;
@@ -81,22 +103,24 @@ static int copy(int src_fd, int dest_fd)
 		size_t num_left = num_read;
 
 		while (num_left > 0) {
-			int len;
+			int num_written;
 
 			// see if the buffert starts with any zeros
-			size_t num_skipped = skip_zeros(&left, &num_left);
-			if (num_skipped) {
+			num_skip = skip_zeros(&left, &num_left);
+			if (num_skip) {
 				// skip zeros
-				lseek(dest_fd, num_skipped, SEEK_CUR);
+				if (lseek(dest_fd, num_skip, SEEK_CUR) == -1) {
+					goto fail;
+				}
 			}
 
-			// count the number of bytes until the next zero
-			len = strnlen(left, num_left);
-			num_left -= len;
-
-			// write the bytes until the next zero
-			if (write(dest_fd, left, len) != len) {
+			num_written = write_nonzeros(dest_fd, &left, &num_left);
+			if (num_written < 0) {
+				// writing failed
 				goto fail;
+			} else if (num_written > 0) {
+				// wrote some characters
+				num_skip = 0;
 			}
 		}
 	}
@@ -104,6 +128,17 @@ static int copy(int src_fd, int dest_fd)
 	// check if finished because read failed
 	if (num_read == -1) {
 		goto fail;
+	}
+
+	// need to skip to the end?
+	if (num_skip) {
+		if (lseek(dest_fd, -1, SEEK_CUR) == -1) {
+			goto fail;
+		}
+		// write a zero at the last position to skip the remaining characters
+		if (write(dest_fd, "\0", 1) != 1) {
+			goto fail;
+		}
 	}
 
 	free(buf);

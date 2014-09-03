@@ -8,9 +8,9 @@
 #include "opts.h"
 // for fprintf, stdin, stderr
 #include <stdio.h>
-// for open, close, O_WRONLY, O_CREAT, O_APPEND, O_TRUNC
+// for open, O_WRONLY, O_CREAT, O_APPEND, O_TRUNC
 #include <fcntl.h>
-// for read, STDIN_FILENO
+// for close, read, STDIN_FILENO
 #include <unistd.h>
 // for S_IRUSR, S_IWUSER, S_IRGRP, S_IWGRP
 #include <sys/stat.h>
@@ -25,7 +25,7 @@
 /**
  * Prints the latest error and quit.
  */
-void __attribute__((__noreturn__)) error()
+static void __attribute__((__noreturn__)) error(void)
 {
 	if (errno) {
 		perror("tee");

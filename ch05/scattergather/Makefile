@@ -1,15 +1,20 @@
 CC			= gcc
 CFLAGS		= -g
-TARGET		= sgtest
-OBJS		= sgtest.o sg.o
-CLEANFILES = $(TARGET) $(OBJS)
+OBJS		= *.o
+CLEANFILES	= writetest readtest $(OBJS)
 
-$(TARGET): $(OBJS)
+all: writetest readtest
+
+writetest: writetest.o sg.o opts.o common.o
+	$(LINK.o) -o $@ $^
+
+readtest: readtest.o sg.o opts.o common.o
 	$(LINK.o) -o $@ $^
 
 .PHONY: clean
 clean:
 	rm -rf $(CLEANFILES)
 
-sgtest.o: sgtest.c sg.h
+writetest.o: writetest.c sg.h opts.h common.h
+readtest.o: readtest.c sg.h opts.h common.h
 

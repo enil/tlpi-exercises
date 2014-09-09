@@ -11,5 +11,10 @@
  */
 extern ssize_t newreadv(int fd, const struct iovec * iov, int iovcnt);
 
+/**
+ * Scatter write.
+ */
+extern ssize_t newwritev(int fd, const struct iovec * iov, int iovcnt);
+
 #endif
 

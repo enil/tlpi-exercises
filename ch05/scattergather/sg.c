@@ -71,3 +71,44 @@ fail:
 	}
 	return -1;
 }
+
+ssize_t newwritev(int fd, const struct iovec * iov, int iovcnt)
+{
+	size_t buf_size = 0;
+	ssize_t bytes_written;
+	char * buf = NULL;
+	char * next;
+
+	// calculate size of the buffer
+	EACH_IOVEC(cur, iov, iovcnt) {
+		buf_size += cur->iov_len;
+	}
+
+	// allocate buffer
+	if ((buf = (char *)malloc(sizeof(*buf) * buf_size)) == NULL) {
+		errno = ENOMEM;
+		goto fail;
+	}
+
+	// start from the beginning of the buffer
+	next = buf;
+	// fill buffer
+	EACH_IOVEC(cur, iov, iovcnt) {
+		memcpy(next, cur->iov_base, cur->iov_len);
+		next += cur->iov_len;
+	}
+
+	// write the buffer
+	if ((bytes_written = write(fd, buf, buf_size)) == -1) {
+		goto fail;
+	}
+
+	free(buf);
+
+	return bytes_written;
+fail:
+	if (buf) {
+		free(buf);
+	}
+	return -1;
+}

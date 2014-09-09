@@ -1,3 +1,10 @@
+ /**
+ * @file	common.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "common.h"
 
 // for malloc, free, NULL, size_t

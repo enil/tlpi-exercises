@@ -1,3 +1,10 @@
+ /**
+ * @file	opts.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef SG_OPTS_H
 #define SG_OPTS_H
 

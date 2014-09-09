@@ -1,3 +1,10 @@
+ /**
+ * @file	common.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef SG_COMMON_H
 #define SG_COMMON_H
 

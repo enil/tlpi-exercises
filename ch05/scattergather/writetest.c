@@ -1,3 +1,10 @@
+ /**
+ * @file	writetest.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "sg.h"
 #include "opts.h"
 #include "common.h"

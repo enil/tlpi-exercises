@@ -1,3 +1,10 @@
+ /**
+ * @file	sg.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef SG_SG_H
 #define SG_SG_H
 

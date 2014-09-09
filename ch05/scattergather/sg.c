@@ -1,3 +1,10 @@
+ /**
+ * @file	sg.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "sg.h"
 
 // for malloc, free, NULL

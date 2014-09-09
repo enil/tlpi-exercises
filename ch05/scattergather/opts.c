@@ -1,3 +1,10 @@
+ /**
+ * @file	opts.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "opts.h"
 
 // for fprintf, stderr

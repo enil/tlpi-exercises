@@ -1,3 +1,10 @@
+ /**
+ * @file	appendstart.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 // for exit, EXIT_SUCCESS, EXIT_FAILURE
 #include <stdlib.h>
 // for fprintf, perror, stderr

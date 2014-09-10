@@ -1,3 +1,10 @@
+ /**
+ * @file	newduptest.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "newdup.h"
 // for fprintf, snprintf, stderr
 #include <stdio.h>

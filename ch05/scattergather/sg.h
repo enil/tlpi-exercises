@@ -14,12 +14,12 @@
 #include <sys/uio.h>
 
 /**
- * Gather read.
+ * Scatter read.
  */
 extern ssize_t newreadv(int fd, const struct iovec * iov, int iovcnt);
 
 /**
- * Scatter write.
+ * Gather write.
  */
 extern ssize_t newwritev(int fd, const struct iovec * iov, int iovcnt);
 

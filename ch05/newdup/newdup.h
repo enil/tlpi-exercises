@@ -1,3 +1,10 @@
+ /**
+ * @file	newdup.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef NEWDUP_NEWDUP_H
 #define NEWDUP_NEWDUP_H
 

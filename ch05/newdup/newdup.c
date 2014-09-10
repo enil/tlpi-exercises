@@ -1,3 +1,10 @@
+ /**
+ * @file	newdup.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "newdup.h"
 
 // for fcntl, F_DUPFD

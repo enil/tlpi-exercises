@@ -1,3 +1,10 @@
+ /**
+ * @file	dupoffs.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 // for printf, perror
 #include <stdio.h>
 // for mkstemp, exit, EXIT_SUCCESS, EXIT_FAILURE

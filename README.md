@@ -1,5 +1,5 @@
 # TLPI Excercises
-A repo with my solutions to the excercise from [The Linux Programming
+A repo with my solutions to the exercises from [The Linux Programming
 Interface].
 
 ## License

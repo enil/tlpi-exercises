@@ -1,5 +1,5 @@
 CC			= gcc
-CFLAGS		= -g
+CFLAGS		= -g -std=c99 -D_GNU_SOURCE
 TARGET		= envtest
 OBJS		= envtest.o env.o
 CLEANFILES = $(TARGET) $(OBJS)

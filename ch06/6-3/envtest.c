@@ -11,6 +11,10 @@
 #include <stdlib.h>
 // for printf
 #include <stdio.h>
+// for true, false
+#include <stdbool.h>
+// for assert
+#include <assert.h>
 
 extern char ** environ;
 
@@ -26,6 +30,18 @@ static void printenv(void)
 
 int main(int argc, char * argv[])
 {
+	// always set path
+	assert(newsetenv("PATH", "/opt/local/bin", true) == 0);
+
+	// try to set user (will not succeed)
+	assert(newsetenv("USER", "jsmith", false) == 0);
+
+	// set new variables
+	assert(newsetenv("foo", "bar", true) == 0);
+	assert(newsetenv("hello", "world", true) == 0);
+
+	assert(newunsetenv("hello") == 0);
+
 	printenv();
 
 	return EXIT_SUCCESS;

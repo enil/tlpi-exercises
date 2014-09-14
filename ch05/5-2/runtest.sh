@@ -1,6 +1,6 @@
 #!/bin/sh
 
-OUTPUT_FILE=$(mktemp -t appendstart)
+OUTPUT_FILE=$(mktemp -t appendstart.XXXXXX)
 APPEND_START=./appendstart
 
 echo "Original content" > $OUTPUT_FILE
@@ -12,3 +12,4 @@ cat $OUTPUT_FILE
 
 # clean up
 rm -r $OUTPUT_FILE
+

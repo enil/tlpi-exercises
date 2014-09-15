@@ -1,5 +1,5 @@
 CC			= gcc
-CFLAGS		= -g
+CFLAGS		= -g -std=c99 -D_BSD_SOURCE
 TARGET		= dupoffs
 OBJS		= dupoffs.o
 CLEANFILES = $(TARGET) $(OBJS)

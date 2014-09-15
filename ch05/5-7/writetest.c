@@ -12,6 +12,8 @@
 #include <stdio.h>
 // for exit, EXIT_SUCCESS, EXIT_FAILURE, NULL
 #include <stdlib.h>
+// for S_IRUSR, S_IRGRP, S_IWUSR, S_IWGRP
+#include <sys/stat.h>
 // for open
 #include <fcntl.h>
 // for close

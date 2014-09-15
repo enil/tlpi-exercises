@@ -3,6 +3,9 @@ TARGET		= tee
 OBJS		= tee.o opts.o
 CLEANFILES = $(TARGET) $(OBJS)
 
+.PHONY: all
+all: $(TARGET)
+
 $(TARGET): $(OBJS)
 
 .PHONY: clean

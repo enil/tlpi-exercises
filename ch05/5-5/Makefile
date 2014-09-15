@@ -4,6 +4,9 @@ TARGET		= dupoffs
 OBJS		= dupoffs.o
 CLEANFILES = $(TARGET) $(OBJS)
 
+.PHONY: all
+all: $(TARGET)
+
 $(TARGET): $(OBJS)
 
 .PHONY: clean

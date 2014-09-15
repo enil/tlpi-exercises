@@ -4,6 +4,9 @@ TARGET		= newduptest
 OBJS		= newduptest.o newdup.o
 CLEANFILES = $(TARGET) $(OBJS)
 
+.PHONY: all
+all: $(TARGET)
+
 $(TARGET): $(OBJS)
 	$(LINK.o) -o $@ $^
 

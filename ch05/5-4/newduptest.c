@@ -14,6 +14,8 @@
 #include <fcntl.h>
 // for close
 #include <unistd.h>
+// for S_IRUSR, S_IRGRP, S_IWUSR, S_IWGRP
+#include <sys/stat.h>
 // for errno
 #include <errno.h>
 
@@ -24,7 +26,7 @@
 #define FDS_2_FD 10
 
 /** The file permissions used when creating a new file. */
-#define FILE_PERMISSIONS S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP
+#define FILE_PERMISSIONS (S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP)
 
 /** A message to write to the file. */
 #define MESSAGE "Hello from file descriptor %d!\n"

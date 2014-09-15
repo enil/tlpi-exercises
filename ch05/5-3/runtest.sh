@@ -6,7 +6,7 @@ run_stat() {
 	if [ x$(uname -s) = xDarwin ]; then
 		stat -f "%N: size=%z bytes $extra" $file
 	else
-		stat -f "%n: size=%s bytes $extra" $file
+		stat -c "%n: size=%s bytes $extra" $file
 	fi
 }
 
@@ -19,12 +19,12 @@ rm -f $FILES
 
 # run with append
 echo "Running with append $TIMES times"
-time $AA f1 $TIMES & $AA f1 $TIMES &
+$AA f1 $TIMES & $AA f1 $TIMES &
 wait
 
 # run without append
 echo "Running without append $TIMES times"
-time $AA f2 $TIMES x & $AA f2 $TIMES x &
+$AA f2 $TIMES x & $AA f2 $TIMES x &
 wait
 
 # print file sizes

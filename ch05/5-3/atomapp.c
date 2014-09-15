@@ -84,7 +84,7 @@ static bool read_opts(struct opts * options, int argc, char * argv[])
  */
 static int write_bytes(int fd, struct opts options)
 {
-	for (int pos; pos < options.num_bytes; ++pos) {
+	for (int pos = 0; pos < options.num_bytes; ++pos) {
 		if (!options.append) {
 			// position at the end of the file
 			if (lseek(fd, 0, SEEK_END) == -1) {
@@ -95,6 +95,8 @@ static int write_bytes(int fd, struct opts options)
 			return errno;
 		}
 	}
+
+	fsync(fd);
 
 	// success
 	return 0;

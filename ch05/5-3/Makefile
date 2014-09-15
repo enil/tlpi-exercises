@@ -1,5 +1,5 @@
 CC			= gcc
-CFLAGS		= -g
+CFLAGS		= -g -std=c99
 TARGET		= atomic_append
 OBJS		= atomapp.o
 CLEANFILES = $(TARGET) $(OBJS)

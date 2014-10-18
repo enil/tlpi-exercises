@@ -1,7 +1,7 @@
 CC			= gcc
-CFLAGS		= -g
+CFLAGS		= -g -DDEBUG
 TARGET		= alloctest
-OBJS		= alloctest.o
+OBJS		= alloctest.o newalloc.o
 CLEANFILES = $(TARGET) $(OBJS)
 
 .PHONY: all
@@ -13,4 +13,7 @@ $(TARGET): $(OBJS)
 .PHONY: clean
 clean:
 	rm -rf $(CLEANFILES)
+
+alloctest.o: alloctest.c newalloc.h
+newalloc.o: newalloc.c newalloc.h
 

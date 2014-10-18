@@ -50,6 +50,11 @@ typedef struct __attribute__((__aligned__(16))) na_node {
 #define NA_GET_DATA_PTR(node) ((void *)node + sizeof(na_node))
 
 /**
+ * Gets the allocated memory node for its data pointer.
+ */
+#define NA_GET_NODE_PTR(data) ((void *)data - sizeof(na_node))
+
+/**
  * Gets the total size of a memory node.
  */
 #define NA_GET_NODE_SIZE(node) (sizeof(na_node) + node->len)
@@ -58,6 +63,11 @@ typedef struct __attribute__((__aligned__(16))) na_node {
  * Allocates memory on the heap.
  */
 extern void * na_malloc(size_t size);
+
+/**
+ * Frees memory allocated on the heap.
+ */
+extern void na_free(void * data);
 
 /**
  * Reserves memory and creates a memory node.

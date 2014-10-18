@@ -1,5 +1,7 @@
 #include "newalloc.h"
 
+// for abort
+#include <stdlib.h>
 // for sbrk
 #include <unistd.h>
 // for ptrdiff_t
@@ -84,6 +86,20 @@ void * na_malloc(size_t size)
 	fitting_node->used = true;
 
 	return NA_GET_DATA_PTR(fitting_node);
+}
+
+void na_free(void * data)
+{
+	// get the node
+	na_node * node = NA_GET_NODE_PTR(data);
+
+	if (!node->used) {
+		// attempted to free non-allocated memory
+		abort();
+	}
+
+	// mark as unused
+	node->used = false;
 }
 
 na_node * na_reserve_node_mem(size_t size)

@@ -30,7 +30,12 @@ typedef struct __attribute__((__aligned__(16))) na_node {
  *
  * Alignment should be a power of 2.
  */
-#define NA_ALIGN_PTR(ptr, type, align) (type)(((intptr_t)ptr + ((1 << align) - 1)) & (~0 << align))
+#define NA_ALIGN_PTR(ptr, type, align) ((type)(((intptr_t)ptr + ((1 << align) - 1)) & (~0 << align)))
+
+/**
+ * Aligns a size "rounding" up.
+ */
+#define NA_ALIGN_SIZE_T(size, align) ((size_t)((size + ((1 << align) - 1)) & (~0 << align)))
 
 /**
  * Checks alignment on a pointer.
@@ -42,7 +47,22 @@ typedef struct __attribute__((__aligned__(16))) na_node {
 /**
  * Gets the data for an allocated memory node.
  */
-#define NA_GET_DATA_PTR(node) ((void *)&node + sizeof(na_node))
+#define NA_GET_DATA_PTR(node) ((void *)node + sizeof(na_node))
+
+/**
+ * Gets the total size of a memory node.
+ */
+#define NA_GET_NODE_SIZE(node) (sizeof(na_node) + node->len)
+
+/**
+ * Allocates memory on the heap.
+ */
+extern void * na_malloc(size_t size);
+
+/**
+ * Reserves memory and creates a memory node.
+ */
+extern na_node * na_reserve_node_mem(size_t size);
 
 /**
  * Initializes a memory node.
@@ -55,6 +75,11 @@ extern na_node * na_init_node(void * position, size_t size);
  * Reserves memory for dynamic allocation.
  */
 extern void * na_reserve_mem(size_t size);
+
+/**
+ * Prints information about the memory nodes.
+ */
+extern void na_print_nodes(void);
 
 #endif
 

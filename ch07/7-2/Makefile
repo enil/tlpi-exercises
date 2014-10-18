@@ -1,5 +1,5 @@
 CC			= gcc
-CFLAGS		= -g -DDEBUG
+CFLAGS		= -g -DDEBUG -D_BSD_SOURCE -std=c99
 TARGET		= alloctest
 OBJS		= alloctest.o newalloc.o
 CLEANFILES = $(TARGET) $(OBJS)

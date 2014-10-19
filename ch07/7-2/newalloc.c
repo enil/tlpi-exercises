@@ -49,6 +49,11 @@ static na_node * na_append_node(na_node * node);
 static na_node * na_split_node(na_node * node, size_t size);
 
 /**
+ * Joins an unused node with its successor.
+ */
+static na_node * na_join_node(na_node * node);
+
+/**
  * Finds the first node to fit the required data size.
  */
 static na_node * na_find_fitting_node(size_t size);
@@ -100,6 +105,16 @@ void na_free(void * data)
 
 	// mark as unused
 	node->used = false;
+
+	if (node->next && !node->next->used) {
+		// can join with the succeeding node
+		node = na_join_node(node);
+	}
+
+	if (node->prev && !node->prev->used) {
+		// can join with preceding node
+		node = na_join_node(node->prev);
+	}
 }
 
 na_node * na_reserve_node_mem(size_t size)
@@ -179,18 +194,31 @@ fail:
 void na_print_nodes(void)
 {
 	// header
-	printf("%-4s  %-10s  %-10s  %-6s  %-6s  %-3s\n", "idx", "node", "data", "size", "length", "used");
+	printf("%-4s  %-10s  %-10s  %-10s  %-6s  %-6s  %-3s\n", "idx", "node", "end",  "data", "size", "length", "used");
 
 	int index = 0;
 
 	for (na_node * node = na_first_node; node; node = node->next) {
-		printf("%-4d  0x%08lx  0x%08lx  %-6lu  %-6lu  %-3s\n",
+		printf("%-4d  0x%08lx  0x%08lx  0x%08lx  %-6lu  %-6lu  %-3s\n",
 				index++,
 				(intptr_t)node,
+				(intptr_t)NA_GET_NODE_END(node),
 				(intptr_t)NA_GET_DATA_PTR(node),
 				(unsigned long)NA_GET_NODE_SIZE(node),
 				(unsigned long)node->len,
 				(node->used ? "yes" : "no"));
+	}
+}
+
+void na_list_nodes(void)
+{
+	// header
+	printf("%-10s  %-6s\n", "data", "length");
+
+	for (na_node * node = na_first_node; node; node = node->next) {
+		if (node->used) {
+			printf("0x%08lx  %-6lu\n", (intptr_t)NA_GET_DATA_PTR(node), (unsigned long)node->len);
+		}
 	}
 }
 
@@ -228,6 +256,26 @@ na_node * na_split_node(na_node * node, size_t size)
 	right->next = next;
 
 	return left;
+}
+
+na_node * na_join_node(na_node * node)
+{
+	assert(node->next);
+	assert(!node->used && !node->next->used);
+	assert(NA_GET_NODE_END(node) == node->next);
+
+	// the node to join with
+	na_node * right = node->next;
+	na_node * next = right->next;
+
+	// size of the node to join with
+	size_t right_size = NA_GET_NODE_SIZE(node->next);
+
+	// expand the node
+	node->len += right_size;
+	node->next = next;
+
+	return node;
 }
 
 na_node * na_append_node(na_node * node)

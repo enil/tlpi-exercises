@@ -60,6 +60,11 @@ typedef struct __attribute__((__aligned__(16))) na_node {
 #define NA_GET_NODE_SIZE(node) (sizeof(na_node) + node->len)
 
 /**
+ * Gets the end of a node.
+ */
+#define NA_GET_NODE_END(node) ((void *)node + NA_GET_NODE_SIZE(node))
+
+/**
  * Allocates memory on the heap.
  */
 extern void * na_malloc(size_t size);
@@ -90,6 +95,12 @@ extern void * na_reserve_mem(size_t size);
  * Prints information about the memory nodes.
  */
 extern void na_print_nodes(void);
+
+/**
+ * Prints list of used memory nodes.
+ */
+extern void na_list_nodes(void);
+
 
 #endif
 

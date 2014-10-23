@@ -1,3 +1,3 @@
-# Exercise 6-2: implementation of dynamic memory allocation
+# Exercise 7-2: implementation of dynamic memory allocation
 Implement replacements for malloc() and free().
 

@@ -10,7 +10,7 @@
 #include <string.h>
 // for bool, true, false
 #include <stdbool.h>
-// for errno, EINVAL
+// for errno, ENOMEM
 #include <errno.h>
 // for assert
 #include <assert.h>
@@ -42,6 +42,7 @@ int ng_initgroups(const char * user, gid_t group)
 			if (num_groups == NG_GROUPS_SIZE) {
 				// too many groups
 				ret = -1;
+				errno = -ENOMEM;
 				goto out;
 			}
 			// add the current group

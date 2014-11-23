@@ -1,3 +1,10 @@
+/**
+ * @file	status.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef STATUS_H
 #define STATUS_H
 

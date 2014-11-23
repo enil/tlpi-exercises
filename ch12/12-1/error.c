@@ -1,3 +1,10 @@
+/**
+ * @file	error.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "error.h"
 
 int proc_error = PROC_ERROR_SUCCESS;

@@ -1,3 +1,10 @@
+/**
+ * @file	options.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef OPTIONS_H
 #define OPTIONS_H
 

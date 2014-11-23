@@ -1,3 +1,10 @@
+/**
+ * @file	status.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "status.h"
 
 // for fopen, fclose, feof, fgetc, FILE

@@ -1,3 +1,10 @@
+/**
+ * @file	options.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "options.h"
 
 // for getpwnam

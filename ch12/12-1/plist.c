@@ -1,3 +1,10 @@
+/**
+ * @file	plist.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 // for is_proc_entry, proc_completed, extract_proc_status
 #include "proc.h"
 // for walk_dir

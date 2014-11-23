@@ -1,3 +1,10 @@
+/**
+ * @file	error.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef ERROR_H
 #define ERROR_H
 

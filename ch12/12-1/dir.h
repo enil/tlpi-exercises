@@ -1,3 +1,10 @@
+/**
+ * @file	dir.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef DIR_H
 #define DIR_H
 

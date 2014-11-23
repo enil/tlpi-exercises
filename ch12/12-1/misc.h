@@ -1,3 +1,10 @@
+/**
+ * @file	misc.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef MISC_H
 #define MISC_H
 

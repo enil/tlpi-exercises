@@ -1,3 +1,10 @@
+/**
+ * @file	dir.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "dir.h"
 
 // for opendir, closedir, struct dirent

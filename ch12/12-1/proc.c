@@ -1,3 +1,10 @@
+/**
+ * @file	proc.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "proc.h"
 
 // for read_uid

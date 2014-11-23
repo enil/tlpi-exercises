@@ -1,3 +1,10 @@
+/**
+ * @file	misc.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "misc.h"
 
 // for isdigit, isspace

@@ -1,3 +1,10 @@
+/**
+ * @file	proc.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef PROC_H
 #define PROC_H
 

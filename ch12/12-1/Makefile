@@ -1,7 +1,7 @@
 C			= gcc
 CFLAGS		= -g -DDEBUG -D_GNU_SOURCE -std=gnu99
 TARGET		= plist
-OBJS		= plist.o status.o proc.o dir.o misc.o error.o
+OBJS		= plist.o status.o proc.o dir.o misc.o error.o options.o
 CLEANFILES = $(TARGET) $(OBJS)
 
 .PHONY: all
@@ -19,4 +19,5 @@ proc.o: proc.c proc.h
 dir.o: dir.c dir.h
 misc.o: misc.c misc.h
 error.o: error.c error.h
+options.o: options.c options.h
 

@@ -12,6 +12,10 @@ const char * get_proc_error_str(int error)
 			return "No error";
 		case PROC_ERROR_INVALID_FORMAT:
 			return "Invalid format";
+		case PROC_ERROR_INVALID_ARGS:
+			return "Invalid arguments";
+		case PROC_ERROR_NO_SUCH_USER:
+			return "User not found";
 	}
 
 	return "Unknown error";
@@ -19,6 +23,10 @@ const char * get_proc_error_str(int error)
 
 void print_proc_error(const char * message)
 {
-	fprintf(stderr, "%s: %s\n", message, get_proc_error_str(proc_error));
+	if (message) {
+		fprintf(stderr, "%s: %s\n", message, get_proc_error_str(proc_error));
+	} else {
+		fprintf(stderr, "%s\n", get_proc_error_str(proc_error));
+	}
 }
 

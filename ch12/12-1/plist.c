@@ -4,6 +4,8 @@
 #include "dir.h"
 // for parse_status_file
 #include "status.h"
+// for read_options, proc_options_t
+#include "options.h"
 // for read_pid
 #include "misc.h"
 // for proc_error, PROC_ERROR_SUCCESS
@@ -28,7 +30,7 @@ static bool filter_proc(struct dirent * entry, const char * path, void * data)
  */
 static bool process_line(const char * label, const char * value, void * data)
 {
-	proc_t * proc = (proc_t *)data;
+	proc_t * proc = data;
 
 	// try to extract wanted data from the status label and value
 	extract_proc_status(proc, label, value);
@@ -41,6 +43,7 @@ static bool process_line(const char * label, const char * value, void * data)
  */
 static bool process_status(struct dirent * entry, const char * path, void * data)
 {
+	proc_options_t * options = data;
 	const char * status_path;
 	proc_t proc;
 
@@ -66,18 +69,29 @@ static bool process_status(struct dirent * entry, const char * path, void * data
 		// reset error
 		proc_error = PROC_ERROR_SUCCESS;
 		return true;
-	} else if (proc_completed(&proc)) {
+	} else if (proc_completed(&proc) && proc.uid == options->uid) {
 		// print process information
-		printf("Name: %s, PID: %lld, UID:  %lld\n", proc.cmd_name, (long long)proc.pid, (long long)proc.uid);
+		printf("%-6lld %s\n", (long long)proc.pid, proc.cmd_name);
 	}
 
 	return true;
 }
 
-int main(int argc, char * argv[])
+int main(int argc, const char * argv[])
 {
+	proc_options_t options;
+
+	if (read_options(&options, argc, argv) != 0) {
+		if (proc_error != PROC_ERROR_SUCCESS) { 
+			print_proc_error(NULL);
+		} else {
+			fprintf(stderr, "Usage: plist username\n");
+		}
+		return EXIT_FAILURE;
+	}
+
 	// process status files
-	walk_dir("/proc", filter_proc, process_status, NULL);
+	walk_dir("/proc", filter_proc, process_status, &options);
 
 	// print any errors if parsing failed
 	if (errno) {

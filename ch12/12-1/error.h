@@ -10,6 +10,12 @@ extern int proc_error;
 /** Invalid format in status file. */
 #define PROC_ERROR_INVALID_FORMAT 1
 
+/** Invalid command-line arguments. */
+#define PROC_ERROR_INVALID_ARGS 2
+
+/** No user with the provided name. */
+#define PROC_ERROR_NO_SUCH_USER 3
+
 /**
  * Gets an error message for a process list error.
  */

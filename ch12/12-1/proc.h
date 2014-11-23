@@ -1,7 +1,7 @@
 #ifndef PROC_H
 #define PROC_H
 
-// for is_numeric_string
+// for is_numeric_string, read_pid
 #include "misc.h"
 // for pid_t, uid_t
 #include <sys/types.h>

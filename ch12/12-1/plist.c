@@ -14,7 +14,7 @@
 #include <stdio.h>
 // for EXIT_SUCCESS, EXIT_FAILURE
 #include <stdlib.h>
-// for errno
+// for errno, EACCES
 #include <errno.h>
 
 /**
@@ -68,10 +68,15 @@ static bool process_status(struct dirent * entry, const char * path, void * data
 		print_proc_error("Parsing status file");
 		// reset error
 		proc_error = PROC_ERROR_SUCCESS;
-		return true;
 	} else if (proc_completed(&proc) && proc.uid == options->uid) {
 		// print process information
 		printf("%-6lld %s\n", (long long)proc.pid, proc.cmd_name);
+	} else if (errno != EACCES) {
+		// couldn't access file, probably because the process exited, continue anyway
+		errno = 0;
+	} else if (errno) {
+		// another error, stop
+		return false;
 	}
 
 	return true;
@@ -82,10 +87,12 @@ int main(int argc, const char * argv[])
 	proc_options_t options;
 
 	if (read_options(&options, argc, argv) != 0) {
-		if (proc_error != PROC_ERROR_SUCCESS) { 
-			print_proc_error(NULL);
-		} else {
+		if (proc_error == PROC_ERROR_INVALID_ARGS) { 
+			// wrong number of arguments used
 			fprintf(stderr, "Usage: plist username\n");
+		} else {
+			// failed to parse options, user probably entered a bad user name
+			print_proc_error(NULL);
 		}
 		return EXIT_FAILURE;
 	}

@@ -26,7 +26,7 @@ typedef struct proc_t {
 extern proc_t * read_proc(FILE * file);
 
 /**
- * Frees the memory used by a process information structure.
+ * Frees a process information structure.
  */
 extern void free_proc(proc_t * proc);
 

@@ -37,9 +37,9 @@ static proc_t * alloc_proc(void);
 static int parse_value(const char * label, const char * value, proc_t * proc);
 
 /**
- * Parses the PPID in a proc file.
+ * Parses a PID in a proc file.
  */
-static int parse_ppid(const char * value, pid_t * pid);
+static int parse_pid(const char * value, pid_t * pid);
 
 /**
  * Parses the name in a proc file.
@@ -103,7 +103,7 @@ proc_t * alloc_proc(void)
 {
 	proc_t * proc = NULL;
 
-	if ((proc = malloc(sizeof(proc_t))) == NULL) {
+	if ((proc = (proc_t *)malloc(sizeof(proc_t))) == NULL) {
 		return NULL;
 	}
 	memset(proc, 0, sizeof(proc_t));
@@ -121,13 +121,15 @@ int parse_value(const char * label, const char * value, proc_t * proc)
 {
 	if (strcmp("Name", label) == 0) {
 		return parse_name(value, &proc->name);
+	} else if (strcmp("Pid", label) == 0) {
+		return parse_pid(value, &proc->pid);
 	} else if (strcmp("PPid", label) == 0) {
-		return parse_ppid(value, &proc->ppid);
+		return parse_pid(value, &proc->ppid);
 	}
 	return 0;
 }
 
-int parse_ppid(const char * value, pid_t * pid)
+int parse_pid(const char * value, pid_t * pid)
 {
 	long long_val;
 	char * end;

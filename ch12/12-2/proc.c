@@ -1,5 +1,14 @@
+/**
+ * @file	proc.c
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #include "proc.h"
 
+// for free_child
+#include "pchildren.h"
 // for fgets
 #include <stdio.h>
 // for strchr, strcpy, strdup, memset
@@ -113,6 +122,14 @@ proc_t * alloc_proc(void)
 void free_proc(proc_t * proc)
 {
 	if (proc->name != NULL) {
+        proc_child_t * next = NULL;
+
+        // free the child nodes
+        for (proc_child_t * child = proc->first_child; child; child = next) {
+            next = child->next;
+            free_child(child);
+        }
+
 		free(proc);
 	}
 }

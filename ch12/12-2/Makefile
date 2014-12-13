@@ -1,7 +1,7 @@
 C			= gcc
 CFLAGS		= -g -DDEBUG -D_GNU_SOURCE -std=gnu99
 TARGET		= ptree
-OBJS		= main.o ptree.o proc.o
+OBJS		= main.o ptree.o proc.o pchildren.o
 CLEANFILES = $(TARGET) $(OBJS)
 
 .PHONY: all
@@ -14,7 +14,8 @@ $(TARGET): $(OBJS)
 clean:
 	rm -rf $(CLEANFILES)
 
-main.c: ptree.h
+main.c: ptree.h pchildren.h
 ptree.o: ptree.c ptree.h proc.h
-proc.o: proc.c proc.h
+proc.o: proc.c proc.h pchildren.h
+pchildren.o: pchildren.c pchildren.h
 

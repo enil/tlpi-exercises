@@ -32,7 +32,9 @@ typedef struct proc_list_t {
 /**
  * Iterates over each process in a process list.
  */
-#define EACH_PROC_LIST(list, proc) proc_t * proc = NULL; for (int pos = 0; proc = list->procs[pos], pos < list->size; ++pos) if (proc)
+#define EACH_PROC_LIST(list, proc) \
+    for (int pos = 0; proc = list->procs[pos], pos < list->size; ++pos) \
+        if (proc)
 
 extern proc_list_t * create_proc_list(void);
 

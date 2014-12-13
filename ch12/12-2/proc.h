@@ -1,6 +1,15 @@
+/**
+ * @file	proc.h
+ * @author	Emil Nilsson
+ * @license	MIT
+ * @date	2014
+ */
+
 #ifndef PTREE_PROC_H
 #define PTREE_PROC_H
 
+// for proc_child_t
+#include "pchildren.h"
 // for FILE
 #include <stdio.h>
 // for pid_t
@@ -18,6 +27,12 @@ typedef struct proc_t {
 
     /** The command name. */
     const char * name;
+
+    /** The first child process node. */
+    proc_child_t * first_child;
+
+    /** The last child process node. */
+    proc_child_t * last_child;
 } proc_t;
 
 /**

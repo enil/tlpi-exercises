@@ -113,8 +113,9 @@ proc_list_t * alloc_proc_list(void)
 
 void free_proc_list(proc_list_t * proc_list)
 {
+    proc_t * proc;
 	EACH_PROC_LIST(proc_list, proc) {
-		free(proc);
+		free_proc(proc);
 	}
 	free(proc_list);
 }

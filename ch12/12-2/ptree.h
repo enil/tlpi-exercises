@@ -8,55 +8,27 @@
 #ifndef PTREE_PTREE_H
 #define PTREE_PTREE_H
 
-// for proc_t
-#include "proc.h"
-// for size_t
-#include <stddef.h>
-// for pid_t
-#include <sys/types.h>
+// for proc_list_t
+#include "plist.h"
+// for FILE
+#include <stdio.h>
 
-/** The max number of processes that can be stored in a proc_list_t. */
-#define PTREE_PROC_MAX 32768
+typedef proc_list_t proc_tree_t;
 
 /**
- * A list for the processes running in the system.
+ * Creates a process tree structure.
  */
-typedef struct proc_list_t {
-    /** The max number of processes. */
-	size_t size;
-
-    /** The processes by PID. */
-	proc_t * procs[PTREE_PROC_MAX];
-} proc_list_t;
+extern proc_tree_t * create_proc_tree(void); 
 
 /**
- * Iterates over each process in a process list.
+ * Frees a process tree structure.
  */
-#define EACH_PROC_LIST(list, proc) \
-    for (int pos = 0; proc = list->procs[pos], pos < list->size; ++pos) \
-        if (proc)
-
-extern proc_list_t * create_proc_list(void);
+extern void free_proc_tree(proc_tree_t * proc_tree);
 
 /**
- * Creates a process list structure.
+ * Writes a process tree structure.
  */
-extern proc_list_t * alloc_proc_list(void);
-
-/**
- * Frees a process list structure.
- */
-extern void free_proc_list(proc_list_t * proc_list);
-
-/**
- * Loads a process from a process list.
- */
-extern proc_t * get_proc(proc_list_t * proc_list, pid_t pid);
-
-/**
- * Stores a process in a process list.
- */
-extern void put_proc(proc_list_t * proc_list, proc_t * proc);
-
+extern int write_proc_tree(proc_tree_t * proc_tree, FILE * file);
+ 
 #endif
 

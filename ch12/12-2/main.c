@@ -1,8 +1,8 @@
 /**
- * @file	main.c
- * @author	Emil Nilsson
- * @license	MIT
- * @date	2014
+ * @file    main.c
+ * @author  Emil Nilsson
+ * @license MIT
+ * @date    2014
  */
 
 // for fprintf, stdout, stderr
@@ -14,7 +14,7 @@
 
 int main(int argc, const char * argv[])
 {
-	int ret = EXIT_SUCCESS;
+    int ret = EXIT_SUCCESS;
     proc_tree_t * proc_tree = NULL;
 
     if ((proc_tree = create_proc_tree()) == NULL) {
@@ -33,6 +33,6 @@ out:
     if (proc_tree != NULL) {
         free_proc_tree(proc_tree);
     }
-	return ret;
+    return ret;
 }
 

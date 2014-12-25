@@ -1,8 +1,8 @@
 /**
- * @file	plist.c
- * @author	Emil Nilsson
- * @license	MIT
- * @date	2014
+ * @file    plist.c
+ * @author  Emil Nilsson
+ * @license MIT
+ * @date    2014
  */
 
 #ifndef PTREE_PLIST_H
@@ -23,10 +23,10 @@
  */
 typedef struct proc_list_t {
     /** The max number of processes. */
-	size_t size;
+    size_t size;
 
     /** The processes by PID. */
-	proc_t * procs[PTREE_PROC_MAX];
+    proc_t * procs[PTREE_PROC_MAX];
 } proc_list_t;
 
 /**

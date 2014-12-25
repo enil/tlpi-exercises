@@ -1,8 +1,8 @@
 /**
- * @file	proc.c
- * @author	Emil Nilsson
- * @license	MIT
- * @date	2014
+ * @file    proc.c
+ * @author  Emil Nilsson
+ * @license MIT
+ * @date    2014
  */
 
 #include "proc.h"
@@ -31,8 +31,8 @@
  * The components of a line in a proc file.
  */
 typedef struct proc_line_t {
-	char * label;
-	char * value;
+    char * label;
+    char * value;
 } proc_line_t;
 
 /**
@@ -77,51 +77,51 @@ static char * strip_newline(char * str);
 
 proc_t * read_proc(FILE * file)
 {
-	proc_t * proc = NULL;
-	char line[PTREE_PROC_LINE_SIZE];
-	proc_line_t components;
+    proc_t * proc = NULL;
+    char line[PTREE_PROC_LINE_SIZE];
+    proc_line_t components;
 
-	if ((proc = alloc_proc()) == NULL) {
-		goto fail;
-	}
+    if ((proc = alloc_proc()) == NULL) {
+        goto fail;
+    }
 
-	while ((fgets(line, PTREE_PROC_LINE_SIZE, file))) {
-		if (split_line(line, &components) == -1) {
-			goto fail;
-		}
-		if (parse_value(components.label, components.value, proc) == -1) {
-			goto fail;
-		}
-	}
+    while ((fgets(line, PTREE_PROC_LINE_SIZE, file))) {
+        if (split_line(line, &components) == -1) {
+            goto fail;
+        }
+        if (parse_value(components.label, components.value, proc) == -1) {
+            goto fail;
+        }
+    }
 
-	if (errno) {
-		// reading failed
-		goto fail;
-	}
+    if (errno) {
+        // reading failed
+        goto fail;
+    }
 
-	return proc;
+    return proc;
 
 fail:
-	if (proc) {
-		free_proc(proc);
-	}
-	return NULL;
+    if (proc) {
+        free_proc(proc);
+    }
+    return NULL;
 }
 
 proc_t * alloc_proc(void)
 {
-	proc_t * proc = NULL;
+    proc_t * proc = NULL;
 
-	if ((proc = (proc_t *)malloc(sizeof(proc_t))) == NULL) {
-		return NULL;
-	}
-	memset(proc, 0, sizeof(proc_t));
-	return proc;
+    if ((proc = (proc_t *)malloc(sizeof(proc_t))) == NULL) {
+        return NULL;
+    }
+    memset(proc, 0, sizeof(proc_t));
+    return proc;
 }
 
 void free_proc(proc_t * proc)
 {
-	if (proc->name != NULL) {
+    if (proc->name != NULL) {
         free(proc->name);
     }
 
@@ -137,112 +137,112 @@ void free_proc(proc_t * proc)
 
 int parse_value(const char * label, const char * value, proc_t * proc)
 {
-	if (strcmp("Name", label) == 0) {
-		return parse_name(value, &proc->name);
-	} else if (strcmp("Pid", label) == 0) {
-		return parse_pid(value, &proc->pid);
-	} else if (strcmp("PPid", label) == 0) {
-		return parse_pid(value, &proc->ppid);
-	}
-	return 0;
+    if (strcmp("Name", label) == 0) {
+        return parse_name(value, &proc->name);
+    } else if (strcmp("Pid", label) == 0) {
+        return parse_pid(value, &proc->pid);
+    } else if (strcmp("PPid", label) == 0) {
+        return parse_pid(value, &proc->ppid);
+    }
+    return 0;
 }
 
 int parse_pid(const char * value, pid_t * pid)
 {
-	long long_val;
-	char * end;
+    long long_val;
+    char * end;
 
-	long_val = strtol(value, &end, 10);
-	if (*end != '\0' || long_val == LONG_MIN || long_val == LONG_MAX) {
-		return -1;
-	}
+    long_val = strtol(value, &end, 10);
+    if (*end != '\0' || long_val == LONG_MIN || long_val == LONG_MAX) {
+        return -1;
+    }
 
-	*pid = (pid_t)long_val;
-	return 0;
+    *pid = (pid_t)long_val;
+    return 0;
 }
 
 int parse_name(const char * value, char ** name)
 {
-	if ((*name = strdup(value)) == NULL) {
-		return -1;
-	}
-	return 0;
+    if ((*name = strdup(value)) == NULL) {
+        return -1;
+    }
+    return 0;
 }
 
 int split_line(const char * line, proc_line_t * components)
 {
-	static char label[PTREE_PROC_LINE_SIZE];
-	static char value[PTREE_PROC_LINE_SIZE];
-	const char * pos = line;
+    static char label[PTREE_PROC_LINE_SIZE];
+    static char value[PTREE_PROC_LINE_SIZE];
+    const char * pos = line;
 
-	// copy the label
-	if (copy_until(label, pos, PTREE_PROC_LINE_SIZE, ':', &pos) == -1) {
-		return -1;
-	}
+    // copy the label
+    if (copy_until(label, pos, PTREE_PROC_LINE_SIZE, ':', &pos) == -1) {
+        return -1;
+    }
 
-	// skip spaces before the value
-	if (skip_spaces(pos, &pos) == -1) {
-		return -1;
-	}
+    // skip spaces before the value
+    if (skip_spaces(pos, &pos) == -1) {
+        return -1;
+    }
 
-	// copy the value
-	if (copy_until(value, pos, PTREE_PROC_LINE_SIZE, '\0', &pos) == -1) {
-		return -1;
-	}
+    // copy the value
+    if (copy_until(value, pos, PTREE_PROC_LINE_SIZE, '\0', &pos) == -1) {
+        return -1;
+    }
 
-	memset(components, 0, sizeof(proc_line_t));
-	components->label = label;
-	components->value = strip_newline(value);
+    memset(components, 0, sizeof(proc_line_t));
+    components->label = label;
+    components->value = strip_newline(value);
 
-	return 0;
+    return 0;
 }
 
 ssize_t copy_until(char * dest, const char * src, size_t size, char delim, const char ** end)
 {
-	const char * cur = src;
-	ssize_t len = 0;
+    const char * cur = src;
+    ssize_t len = 0;
 
-	while (*cur && *cur != delim) {
-		cur++;
-		len++;
-	}
+    while (*cur && *cur != delim) {
+        cur++;
+        len++;
+    }
 
-	if (len > size-1 || *cur != delim) {
-		return -1;
-	}
+    if (len > size-1 || *cur != delim) {
+        return -1;
+    }
 
-	*end = cur+1;
-	strncpy(dest, src, len);
-	dest[len] = '\0';
+    *end = cur+1;
+    strncpy(dest, src, len);
+    dest[len] = '\0';
 
-	return len;
+    return len;
 }
 
 size_t skip_spaces(const char * str, const char ** end)
 {
-	const char * cur = str;
-	size_t len = 0;
+    const char * cur = str;
+    size_t len = 0;
 
-	while (*cur && isspace(*cur)) {
-		cur++;
-		len++;
-	}
+    while (*cur && isspace(*cur)) {
+        cur++;
+        len++;
+    }
 
-	*end = cur;
-	return len;
+    *end = cur;
+    return len;
 }
 
 char * strip_newline(char * str)
 {
-	char * cur = str;
-	while (*cur) {
-		cur++;
-	}
+    char * cur = str;
+    while (*cur) {
+        cur++;
+    }
 
-	char * prev = cur-1;
-	if (cur != str && *prev == '\n') {
-		*prev = '\0';
-	}
-	return str;
+    char * prev = cur-1;
+    if (cur != str && *prev == '\n') {
+        *prev = '\0';
+    }
+    return str;
 }
 

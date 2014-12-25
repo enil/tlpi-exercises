@@ -1,8 +1,8 @@
 /**
- * @file	plist.h
- * @author	Emil Nilsson
- * @license	MIT
- * @date	2014
+ * @file    plist.h
+ * @author  Emil Nilsson
+ * @license MIT
+ * @date    2014
  */
 
 #include "plist.h"
@@ -46,16 +46,16 @@ static const char * get_status_file_path(const char * filename);
 
 proc_list_t * create_proc_list(void)
 {
-	proc_list_t * proc_list = NULL;
-	DIR * dir = NULL;
-	struct dirent * entry = NULL;
+    proc_list_t * proc_list = NULL;
+    DIR * dir = NULL;
+    struct dirent * entry = NULL;
 
-	if ((proc_list = alloc_proc_list()) == NULL) {
-		goto fail;
-	}
+    if ((proc_list = alloc_proc_list()) == NULL) {
+        goto fail;
+    }
 
     if ((dir = opendir("/proc")) == NULL) {
-		goto fail;
+        goto fail;
     }
 
     while ((entry = readdir(dir)) != NULL) {
@@ -63,102 +63,102 @@ proc_list_t * create_proc_list(void)
 
         if (is_numeric_string(filename)) {
             const char * path;
-			proc_t * proc;
+            proc_t * proc;
 
             if ((path = get_status_file_path(filename)) == NULL) {
-				goto fail;
+                goto fail;
             }
-			if ((proc = parse_proc_file(path)) == NULL) {
-				goto fail;
-			}
+            if ((proc = parse_proc_file(path)) == NULL) {
+                goto fail;
+            }
 
-			put_proc(proc_list, proc);
+            put_proc(proc_list, proc);
         }
     }
 
     if (errno != 0) {
-		goto fail;
+        goto fail;
     }
 
     if (closedir(dir) == -1) {
-		goto fail;
+        goto fail;
     }
 
-	return proc_list;
+    return proc_list;
 
 fail:
     if (dir != NULL) {
-		closedir(dir);
+        closedir(dir);
     }
-	if (proc_list != NULL) {
-		free_proc_list(proc_list);
-	}
-	return NULL;
+    if (proc_list != NULL) {
+        free_proc_list(proc_list);
+    }
+    return NULL;
 }
 
 proc_list_t * alloc_proc_list(void)
 {
-	proc_list_t * proc_list = NULL;
+    proc_list_t * proc_list = NULL;
 
-	if ((proc_list = (proc_list_t *)malloc(sizeof(proc_list_t))) == NULL) {
-		return NULL;
-	}
-	memset(proc_list, 0, sizeof(proc_list_t));
+    if ((proc_list = (proc_list_t *)malloc(sizeof(proc_list_t))) == NULL) {
+        return NULL;
+    }
+    memset(proc_list, 0, sizeof(proc_list_t));
 
-	// store the size
-	proc_list->size = PTREE_PROC_MAX;
+    // store the size
+    proc_list->size = PTREE_PROC_MAX;
 
-	return proc_list;
+    return proc_list;
 }
 
 void free_proc_list(proc_list_t * proc_list)
 {
     proc_t * proc;
-	EACH_PROC_LIST(proc_list, proc) {
-		free_proc(proc);
-	}
-	free(proc_list);
+    EACH_PROC_LIST(proc_list, proc) {
+        free_proc(proc);
+    }
+    free(proc_list);
 }
 
 proc_t * get_proc(proc_list_t * proc_list, pid_t pid)
 {
-	assert(pid < PTREE_PROC_MAX);
-	return proc_list->procs[pid];
+    assert(pid < PTREE_PROC_MAX);
+    return proc_list->procs[pid];
 }
 
 void put_proc(proc_list_t * proc_list, proc_t * proc)
 {
-	assert(proc->pid < PTREE_PROC_MAX);
-	proc_list->procs[proc->pid] = proc;
+    assert(proc->pid < PTREE_PROC_MAX);
+    proc_list->procs[proc->pid] = proc;
 }
 
 proc_t * parse_proc_file(const char * path)
 {
-	FILE * file = NULL;
-	proc_t * proc = NULL;
+    FILE * file = NULL;
+    proc_t * proc = NULL;
 
-	if ((file = fopen(path, "r")) == NULL) {
-		goto fail;
-	}
+    if ((file = fopen(path, "r")) == NULL) {
+        goto fail;
+    }
 
-	if ((proc = read_proc(file)) == NULL) {
-		goto fail;
-	}
+    if ((proc = read_proc(file)) == NULL) {
+        goto fail;
+    }
 
-	if (fclose(file) != 0) {
-		goto fail;
-	}
+    if (fclose(file) != 0) {
+        goto fail;
+    }
 
-	return proc;
+    return proc;
 
 fail:
-	if (proc != NULL) {
-		free_proc(proc);
-	}
-	if (file != NULL) { 
-		fclose(file);
-	}
-	return NULL;
+    if (proc != NULL) {
+        free_proc(proc);
+    }
+    if (file != NULL) { 
+        fclose(file);
+    }
+    return NULL;
 }
 
 bool is_numeric_string(const char * str)

@@ -1,8 +1,8 @@
 /**
- * @file	proc.h
- * @author	Emil Nilsson
- * @license	MIT
- * @date	2014
+ * @file    proc.h
+ * @author  Emil Nilsson
+ * @license MIT
+ * @date    2014
  */
 
 #ifndef PTREE_PROC_H
@@ -23,7 +23,7 @@ typedef struct proc_t {
     pid_t pid;
 
     /** The PID of the parent process. */
-	pid_t ppid;
+    pid_t ppid;
 
     /** The command name. */
     char * name;

@@ -26,7 +26,7 @@ typedef struct proc_t {
 	pid_t ppid;
 
     /** The command name. */
-    const char * name;
+    char * name;
 
     /** The first child process node. */
     proc_child_t * first_child;

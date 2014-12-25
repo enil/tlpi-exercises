@@ -53,7 +53,7 @@ static int parse_pid(const char * value, pid_t * pid);
 /**
  * Parses the name in a proc file.
  */
-static int parse_name(const char * value, const char ** name);
+static int parse_name(const char * value, char ** name);
 
 /**
  * Splits a line in a proc file.
@@ -122,16 +122,17 @@ proc_t * alloc_proc(void)
 void free_proc(proc_t * proc)
 {
 	if (proc->name != NULL) {
-        proc_child_t * next = NULL;
+        free(proc->name);
+    }
 
-        // free the child nodes
-        for (proc_child_t * child = proc->first_child; child; child = next) {
-            next = child->next;
-            free_child(child);
-        }
+    // free the child nodes
+    proc_child_t * next = NULL;
+    for (proc_child_t * child = proc->first_child; child; child = next) {
+        next = child->next;
+        free_child(child);
+    }
 
-		free(proc);
-	}
+    free(proc);
 }
 
 int parse_value(const char * label, const char * value, proc_t * proc)
@@ -160,7 +161,7 @@ int parse_pid(const char * value, pid_t * pid)
 	return 0;
 }
 
-int parse_name(const char * value, const char ** name)
+int parse_name(const char * value, char ** name)
 {
 	if ((*name = strdup(value)) == NULL) {
 		return -1;

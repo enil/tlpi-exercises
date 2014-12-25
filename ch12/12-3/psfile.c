@@ -7,6 +7,7 @@
 
 #include "psfile.h"
 
+#include "proc.h"
 // for opendir, closedir, DT_DIR, DT_LNK, DIR, struct dirent
 #include <dirent.h>
 // for printf, asprintf
@@ -22,10 +23,21 @@
 // for errno
 #include <errno.h>
 
+/** Header for the list of matching processes. */
+#define PROC_INFO_HEADER "name   PID    PPID\n"
+
+/** Pattern for a matching process. */
+#define PROC_INFO_PATTERN "%-6s %-6lld %-6lld\n"
+
 /**
  * Matches a process for a certain open file.
  */
 static int match_proc_files(const char * path, const char * dir_path, bool * matches);
+
+/**
+ * Prints information about a process.
+ */
+static int print_proc_info(const char * proc_dir_name);
 
 /**
  * Checks if a string only consists of decimal digits.
@@ -38,9 +50,14 @@ static bool is_numeric_string(const char * str);
 static char * get_fd_dir_path(const char * proc_dir);
 
 /**
+ * Gets the path for the status file for a proc directory.
+ */
+static char * get_status_file_path(const char * proc_dir);
+
+/**
  * Creates an absolute path from a path to a directory and a dirent.
  *
- * The dirent can be omitted.
+ * The dirent can be omitted to get the absolute path of the directory part.
  */
 static char * create_full_path(const char * dir_path, struct dirent * entry);
 
@@ -62,6 +79,8 @@ int match_all_proc_files(const char * path)
 		goto out;
     }
 
+    printf("%s", PROC_INFO_HEADER);
+
     while ((entry = readdir(dir)) != NULL) {
         const char * dir_name = entry->d_name;
 
@@ -80,9 +99,8 @@ int match_all_proc_files(const char * path)
                 errno = 0;
             }
 
-            // print the PID of processes matching the file
             if (matches) {
-                printf("%s\n", dir_name);
+                print_proc_info(dir_name);
             }
 
             free(dir_path);
@@ -153,6 +171,43 @@ out:
     return ret;
 }
 
+int print_proc_info(const char * proc_dir_name)
+{
+    char * path = NULL;
+	FILE * file = NULL;
+    int ret = 0;
+	proc_t * proc = NULL;
+
+    // get path for the status file
+    if ((path = get_status_file_path(proc_dir_name)) == NULL) {
+        goto out;
+    }
+
+	if ((file = fopen(path, "r")) == NULL) {
+		goto out;
+	}
+
+	if ((proc = read_proc(file)) == NULL) {
+		goto out;
+	}
+
+    // print name, PID and PPID of the process
+    printf(PROC_INFO_PATTERN, proc->name, (long long)proc->pid, (long long)proc->ppid);
+
+out:
+	if (proc) {
+		free_proc(proc);
+	}
+	if (file) { 
+		fclose(file);
+	}
+    if (path) {
+        free(path);
+    }
+
+	return ret;
+}
+
 bool is_numeric_string(const char * str)
 {
     const char * cur = str;
@@ -161,6 +216,17 @@ bool is_numeric_string(const char * str)
         cur++;
     }
     return *cur == '\0';
+}
+
+char * get_status_file_path(const char * proc_dir)
+{
+    char * buf;
+
+    if (asprintf(&buf, "/proc/%s/status", proc_dir) < 0) {
+        return NULL;
+    }
+
+    return buf;
 }
 
 char * get_fd_dir_path(const char * proc_dir)

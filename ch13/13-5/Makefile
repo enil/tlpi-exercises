@@ -1,7 +1,7 @@
 C			= gcc
 CFLAGS		= -g -DDEBUG -D_GNU_SOURCE -std=gnu99
 TARGET		= tail
-OBJS		= main.o opts.o file.o block.o
+OBJS		= main.o tail.o buf.o opts.o
 CLEANFILES = $(TARGET) $(OBJS)
 
 .PHONY: all
@@ -14,8 +14,8 @@ $(TARGET): $(OBJS)
 clean:
 	rm -rf $(CLEANFILES)
 
-main.o: main.c opts.h block.h
+main.o: main.c tail.h opts.h
+tail.o: tail.c tail.h buf.h
 opts.o: opts.c opts.h
-file.o: file.c file.h block.h 
-block.o: block.c block.h
+buf.o: buf.c buf.h
 

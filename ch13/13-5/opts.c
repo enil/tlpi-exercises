@@ -2,7 +2,7 @@
  * @file       opts.c
  * @author     Emil Nilsson
  * @license    MIT
- * @date       2014
+ * @date       2015
  */
 
 #include "opts.h"
@@ -43,7 +43,7 @@ int tail_read_opts(int argc, const char * argv[], tail_opts * opts)
     filename = *next_arg;
 
     opts->filename = filename;
-    opts->num_lines = num_lines;
+    opts->num_lines = num_lines < 0 ? 0 : num_lines;
 
     // success
     return 0;
